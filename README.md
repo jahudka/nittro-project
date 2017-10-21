@@ -20,7 +20,9 @@ bin/console orm:schema-tool:create
 ### Application layout
  - Configuration is stored in `./etc`.
  - Executable console tool is at `./bin/console`.
- - All application sources are under `./src`.
+ - All application sources are under `./src`, which is a PSR-4 namespace
+   root for the `App` namespace; autoloading in this namespace is provided
+   by Composer.
  - All caches and logs are under `./var`.
 
 ### Doctrine
@@ -55,9 +57,9 @@ bin/console orm:schema-tool:create
    ```
    You can think of the task names as a list of tags separated by
    a colon. The `watch` tag doesn't work with the `fonts` tag,
-   but otherwise all combinations are allowed. Omitting a tag
-   is the same as if you specified all the permutations of the tag,
-   e.g. `watch:js` is the same as `watch:public:js watch:admin:js`
+   but otherwise all combinations are allowed. Omitting any tag except
+   the `watch` tag is the same as if you specified all the permutations of 
+   the tag, e.g. `watch:js` is the same as `watch:public:js watch:admin:js`
    and `public` is the same as `public:js public:css public:fonts`.
  - The default task builds everything. 
  - Nittro components are enabled at the beginning of the gulpfile
