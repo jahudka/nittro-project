@@ -1,0 +1,25 @@
+{
+    "name": "nittro-project",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Nittro project base",
+    "license": "proprietary",
+    "dependencies": {
+        "bootstrap": "^3.3.7",
+        "jquery": "^3.2.1",
+        "nittro": "^2.0.20",
+        "nittro-extras": "^2.0.8"
+    },
+    "devDependencies": {
+        "autoprefixer": "^7.1.5",
+        "gulp": "^3.9.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-filter": "^5.0.1",
+        "gulp-less": "^3.3.2",
+        "gulp-nittro": "^0.2.1",
+        "gulp-postcss": "^7.0.0",
+        "gulp-sourcemaps": "^2.6.1",
+        "gulp-uglify": "^3.0.0",
+        "pump": "^1.0.2"
+    }
+}

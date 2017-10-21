@@ -1,0 +1,8 @@
+/vendor/
+/node_modules/
+/var/cache/
+/var/log/
+/public/js/
+/public/css/
+/public/fonts/
+/etc/config.local.neon

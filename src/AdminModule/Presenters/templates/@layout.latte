@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+        <title>Admin</title>
+
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/admin.min.css" />
+        <script type="application/javascript" src="{$basePath}/js/admin.min.js" async defer></script>
+    </head>
+    <body>
+        <nav n:snippet="header" class="navbar navbar-inverse navbar-fixed-top">
+            {block navbar}
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a role="button" class="navbar-toggle collapsed class-toggle" data-toggle-target="#{snippetId menu}" data-toggle-reset="true">
+                            <span class="sr-only">Navigace</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a n:href="Dashboard:" class="navbar-brand">Admin</a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right hidden-xs">
+                        {if $user->isLoggedIn()}
+                            <li>
+                                <p class="navbar-text">{$user->getIdentity()->name}</p>
+                            </li>
+                            <li><a n:href="User:logout" title="Log out" data-transition=".nittro-transition-auto, .sidebar"><span class="glyphicon glyphicon-log-out"></span></a></li>
+                        {else}
+                            <li><a n:href="User:login" title="Log in"><span class="glyphicon glyphicon-log-in"></span></a></li>
+                        {/if}
+                    </ul>
+                </div>
+            {/block}
+        </nav>
+
+        <section id="main-content">
+            <div n:snippet="menu" class="sidebar nittro-transition-slide" n:inner-block="menu">
+                <nav class="list-group tab-container" data-source="tab">
+                    <a n:href="Dashboard:" data-value="dashboard" n:class="$tab === 'dashboard' ? active, list-group-item">
+                        <span class="glyphicon glyphicon-home"></span>
+                        Přehled
+                    </a>
+                    {if $user->isLoggedIn()}
+                    <a n:href="User:logout" class="list-group-item visible-xs">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Odhlásit
+                    </a>
+                    {/if}
+                </nav>
+            </div>
+            <div class="content">
+                <h1 n:snippet="title" class="nittro-transition-auto nittro-transition-fade">{block title}{/block}</h1>
+                <ul n:flashes></ul>
+                <div n:snippet="content" class="nittro-transition-auto nittro-transition-fade">
+                    {block content}{/block}
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
