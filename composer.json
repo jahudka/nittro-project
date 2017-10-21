@@ -1,6 +1,6 @@
 {
     "name": "jahudka/nittro-project",
-    "license": "proprietary",
+    "license": "MIT",
     "type": "project",
     "require": {
         "nette/di": "^2.4.10",
