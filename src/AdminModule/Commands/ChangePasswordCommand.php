@@ -50,22 +50,17 @@ class ChangePasswordCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int {
-        try {
-            $user = $this->userRepository->findOneBy(['email' => $input->getArgument('email')]);
+        $user = $this->userRepository->findOneBy(['email' => $input->getArgument('email')]);
 
-            if (!$user) {
-                $output->writeln('<error>Sorry, no user with the specified e-mail was found!</error>');
-                return 1;
-            } else {
-                $user->setPassword($input->getArgument('password'));
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-                $output->writeln('<info>Password changed successfully.</info>');
-                return 0;
-            }
-        } catch (UniqueConstraintViolationException $e) {
-            $output->writeln('<error>Sorry, the e-mail address you provided is already taken!</error>');
+        if (!$user) {
+            $output->writeln('<error>Sorry, no user with the specified e-mail was found!</error>');
             return 1;
+        } else {
+            $user->setPassword($input->getArgument('password'));
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+            $output->writeln('<info>Password changed successfully.</info>');
+            return 0;
         }
     }
 

@@ -11,7 +11,7 @@ class Helpers {
 
     public static function getPasswordValidator(string $verificationPrompt = null) : callable {
         $verify = new Question($verificationPrompt ?: 'Retype password for verification: ');
-        $verify->setNormalizer([static::class, 'normalizeValue']);
+        $verify->setNormalizer([static::class, 'trimIfString']);
         $verify->setMaxAttempts(1);
         $verify->setHidden(true);
 
@@ -32,8 +32,8 @@ class Helpers {
         };
     }
 
-    public static function normalizeValue(?string $v) : string {
-        return $v ? trim($v) : '';
+    public static function trimIfString($value) {
+        return is_string($value) ? trim($value) : $value;
     }
 
 }

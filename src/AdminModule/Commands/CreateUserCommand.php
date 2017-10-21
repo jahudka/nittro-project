@@ -7,7 +7,7 @@ namespace App\AdminModule\Commands;
 use App\Console\Helpers;
 use App\Console\InteractionHelper;
 use App\Entity\Identity;
-use Dibi\UniqueConstraintViolationException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Kdyby\Doctrine\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -37,6 +37,7 @@ class CreateUserCommand extends Command {
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the user')
             ->addArgument('email', InputArgument::REQUIRED, 'The e-mail of the user')
             ->addArgument('password', InputArgument::REQUIRED, 'The password of the user')
+            ->addArgument('roles', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The roles to grant the user', ['admin'])
         ;
     }
 
@@ -57,6 +58,7 @@ class CreateUserCommand extends Command {
             $user->setEmail($input->getArgument('email'));
             $user->setName($input->getArgument('name'));
             $user->setPassword($input->getArgument('password'));
+            $user->setRoles($input->getArgument('roles'));
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 

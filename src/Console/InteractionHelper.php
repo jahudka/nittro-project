@@ -29,22 +29,29 @@ class InteractionHelper {
         $this->questionHelper = $questionHelper;
     }
 
+    public function ensureArgumentIsValid(string $name, callable $validator, string $question, bool $hidden = false) : void {
+        $this->ensureInputIsValid('Argument', ... func_get_args());
+    }
 
-    public function ensureArgumentIsValid(string $argument, callable $validator, string $question, bool $hidden = false) : void {
-        $this->validateInputArgument($argument, $validator);
+    public function ensureOptionIsValid(string $name, callable $validator, string $question, bool $hidden = false) : void {
+        $this->ensureInputIsValid('Option', ... func_get_args());
+    }
 
-        if (!$this->input->getArgument($argument)) {
+    private function ensureInputIsValid(string $method, string $name, callable $validator, string $question, bool $hidden = false) : void {
+        $this->validateInitialInput($method, $name, $validator);
+
+        if (!$this->input->{'get' . $method}($name)) {
             $question = new Question($question . ($hidden ? ' ' : "\n"));
             $question->setHidden($hidden);
             $question
-                ->setNormalizer([Helpers::class, 'normalizeValue'])
+                ->setNormalizer([Helpers::class, 'trimIfString'])
                 ->setValidator(function($v) use ($validator) {
                     call_user_func($validator, $v, true, $this);
                     return $v;
                 });
 
             $value = $this->ask($question);
-            $this->input->setArgument($argument, $value);
+            $this->input->{'set' . $method}($name, $value);
         }
     }
 
@@ -52,12 +59,12 @@ class InteractionHelper {
         return $this->questionHelper->ask($this->input, $this->output, $question);
     }
 
-    private function validateInputArgument(string $argument, callable $validator) : void {
+    private function validateInitialInput(string $method, string $name, callable $validator) : void {
         try {
-            call_user_func($validator, $this->input->getArgument($argument), false, $this);
+            call_user_func($validator, $this->input->{'get' . $method}($name), false, $this);
         } catch (\RuntimeException $e) {
             $this->output->writeln('<error>' . $e->getMessage() . '</error>');
-            $this->input->setArgument($argument, null);
+            $this->input->{'set' . $method}($name, null);
         }
     }
 
