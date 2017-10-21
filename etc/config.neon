@@ -1,6 +1,9 @@
 extensions:
-    dibi: Dibi\Bridges\Nette\DibiExtension22
     factories: App\DI\AppExtension
+    console: Kdyby\Console\DI\ConsoleExtension
+    annotations: Kdyby\Annotations\DI\AnnotationsExtension
+    doctrine: Kdyby\Doctrine\DI\OrmExtension
+    events: Kdyby\Events\DI\EventsExtension
 
 parameters:
 
@@ -18,13 +21,24 @@ routing:
         'admin[/<presenter>[/<action>]]': {module: Admin, presenter: Dashboard, action: default}
         '<presenter>[/<action>]': {module: Public, presenter: Home, action: default}
 
-dibi:
-    driver: pdo
-    dsn:
-    username:
+console:
+    name: 'Project Console'
+    application: false
+    fakeHttp: true
+    url: http://localhost:8000
+
+doctrine:
+    host:
+    user:
     password:
-    profiler: on
-    lazy: yes
+    charset: UTF8
+    driver: pdo_mysql
+    dbname:
+    metadata:
+        App\Entity: %srcDir%/Entity
+
+annotations:
+    debug: yes
 
 session:
     autoStart: smart
@@ -35,6 +49,5 @@ latte:
         - Nittro\Bridges\NittroLatte\NittroMacros
 
 services:
+    - App\Security\DoctrineIdentityProvider
     - App\Security\SimpleAuthenticator
-    - App\Models\UserModel
-    - Symfony\Component\Console\Application

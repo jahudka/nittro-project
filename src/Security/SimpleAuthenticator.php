@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Models\NoMatchException;
-use App\Models\UserModel;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
-use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 
 
 class SimpleAuthenticator implements IAuthenticator {
 
-    /** @var UserModel */
-    private $model;
+    private $identityProvider;
 
-    public function __construct(UserModel $model) {
-        $this->model = $model;
+
+    public function __construct(IIdentityProvider $identityProvider) {
+        $this->identityProvider = $identityProvider;
     }
 
     /**
@@ -27,19 +24,13 @@ class SimpleAuthenticator implements IAuthenticator {
      * @throws AuthenticationException
      */
     public function authenticate(array $credentials) : IIdentity {
-        [$email, $password] = $credentials;
+        $identity = $this->identityProvider->findByCredentials($credentials);
 
-        try {
-            $user = $this->model->get(['email' => $email]);
-
-            if (!password_verify($password, $user->password_hash)) {
-                throw new AuthenticationException();
-            }
-
-            return new Identity($user->id, ['admin'], ['name' => $user->name]);
-        } catch (NoMatchException $e) {
+        if (!$identity || !$identity->areCredentialsValid($credentials)) {
             throw new AuthenticationException();
         }
+
+        return $identity;
     }
 
 }

@@ -1,5 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 $container = require __DIR__ . '/../src/bootstrap.php';
-$container->getByType(Symfony\Component\Console\Application::class)->run();
+$application = $container->getByType(Kdyby\Console\Application::class);
+exit($application->run());

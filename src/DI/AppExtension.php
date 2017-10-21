@@ -28,21 +28,11 @@ class AppExtension extends CompilerExtension {
             if (!$builder->getByType($class)) {
                 $builder->addDefinition($this->allocateName($builder, $class))
                     ->setType($class)
-                    ->setAutowired(false);
+                    ->setAutowired(false)
+                    ->addTag('kdyby.console.command');
             }
         }
     }
-
-    public function beforeCompile() : void {
-        $builder = $this->getContainerBuilder();
-        $application = $builder->getDefinitionByType(Application::class);
-        $commands = $builder->findByType(Command::class);
-
-        foreach ($commands as $name => $command) {
-            $application->addSetup('add', ['@' . $name]);
-        }
-    }
-
 
     private function allocateName(ContainerBuilder $builder, string $class) : string {
         return count($builder->getDefinitions()) . '.' . preg_replace('#\W+#', '_', $class);

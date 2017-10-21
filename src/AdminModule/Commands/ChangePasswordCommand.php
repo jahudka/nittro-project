@@ -6,9 +6,9 @@ namespace App\AdminModule\Commands;
 
 use App\Console\Helpers;
 use App\Console\InteractionHelper;
-use App\Models\NoMatchException;
-use App\Models\UserModel;
-use Dibi\UniqueConstraintViolationException;
+use App\Entity\Identity;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Kdyby\Doctrine\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,13 +18,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ChangePasswordCommand extends Command {
 
-    /** @var UserModel */
-    private $model;
+    private $entityManager;
+
+    private $userRepository;
 
 
-    public function __construct(UserModel $model) {
+    public function __construct(EntityManager $entityManager) {
         parent::__construct();
-        $this->model = $model;
+        $this->entityManager = $entityManager;
+        $this->userRepository = $entityManager->getRepository(Identity::class);
     }
 
 
@@ -49,19 +51,18 @@ class ChangePasswordCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) : int {
         try {
-            $user = $this->model->get(['email' => $input->getArgument('email')]);
+            $user = $this->userRepository->findOneBy(['email' => $input->getArgument('email')]);
 
-            $this->model->save([
-                'id' => $user->id,
-                'password_hash' => password_hash($input->getArgument('password'), PASSWORD_DEFAULT),
-            ]);
-
-            $output->writeln('<info>Password changed successfully.</info>');
-            return 0;
-
-        } catch (NoMatchException $e) {
-            $output->writeln('<error>Sorry, no user with the specified e-mail was found!</error>');
-            return 1;
+            if (!$user) {
+                $output->writeln('<error>Sorry, no user with the specified e-mail was found!</error>');
+                return 1;
+            } else {
+                $user->setPassword($input->getArgument('password'));
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+                $output->writeln('<info>Password changed successfully.</info>');
+                return 0;
+            }
         } catch (UniqueConstraintViolationException $e) {
             $output->writeln('<error>Sorry, the e-mail address you provided is already taken!</error>');
             return 1;
@@ -74,7 +75,7 @@ class ChangePasswordCommand extends Command {
             if ($need) {
                 throw new \RuntimeException('Please specify a valid e-mail address');
             }
-        } else if (!$this->model->get(['email' => $email], false)) {
+        } else if (!$this->userRepository->findOneBy(['email' => $email], false)) {
             throw new \RuntimeException('No user with the specified e-mail exists');
         }
     }

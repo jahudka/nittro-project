@@ -26,7 +26,7 @@
                     <ul class="nav navbar-nav navbar-right hidden-xs">
                         {if $user->isLoggedIn()}
                             <li>
-                                <p class="navbar-text">{$user->getIdentity()->name}</p>
+                                <p class="navbar-text">{$user->getIdentity()->getName()}</p>
                             </li>
                             <li><a n:href="User:logout" title="Log out" data-transition=".nittro-transition-auto, .sidebar"><span class="glyphicon glyphicon-log-out"></span></a></li>
                         {else}

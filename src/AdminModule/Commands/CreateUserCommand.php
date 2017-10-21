@@ -6,8 +6,9 @@ namespace App\AdminModule\Commands;
 
 use App\Console\Helpers;
 use App\Console\InteractionHelper;
-use App\Models\UserModel;
+use App\Entity\Identity;
 use Dibi\UniqueConstraintViolationException;
+use Kdyby\Doctrine\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,13 +18,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateUserCommand extends Command {
 
-    /** @var UserModel */
-    private $model;
+    private $entityManager;
+
+    private $userRepository;
 
 
-    public function __construct(UserModel $model) {
+    public function __construct(EntityManager $entityManager) {
         parent::__construct();
-        $this->model = $model;
+        $this->entityManager = $entityManager;
+        $this->userRepository = $entityManager->getRepository(Identity::class);
     }
 
 
@@ -50,11 +53,12 @@ class CreateUserCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) : int {
         try {
-            $this->model->save([
-                'email' => $input->getArgument('email'),
-                'password_hash' => password_hash($input->getArgument('password'), PASSWORD_DEFAULT),
-                'name' => $input->getArgument('name'),
-            ]);
+            $user = new Identity();
+            $user->setEmail($input->getArgument('email'));
+            $user->setName($input->getArgument('name'));
+            $user->setPassword($input->getArgument('password'));
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
             $output->writeln('<info>User created.</info>');
             return 0;
@@ -70,7 +74,7 @@ class CreateUserCommand extends Command {
             if ($need) {
                 throw new \RuntimeException('Name cannot be empty');
             }
-        } else if ($this->model->get(['name' => $name], false)) {
+        } else if ($this->userRepository->findOneBy(['name' => $name], false)) {
             throw new \RuntimeException('That user already exists');
         }
     }
@@ -82,7 +86,7 @@ class CreateUserCommand extends Command {
             }
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \RuntimeException('Please specify a valid e-mail address');
-        } else if ($this->model->get(['email' => $email], false)) {
+        } else if ($this->userRepository->findOneBy(['email' => $email], false)) {
             throw new \RuntimeException('That e-mail is already taken');
         }
     }

@@ -7,13 +7,27 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
 
-$configurator->setDebugMode(['Naith.local', '172.16.15.2']);
+if (!Kdyby\Console\DI\BootstrapHelper::setupMode($configurator)) {
+    $configurator->setDebugMode(['Naith.local', '172.16.15.2']);
+}
 
-$configurator->enableTracy(__DIR__ . '/../var/log');
+$rootDir = dirname(__DIR__);
+
+$configurator->enableTracy($rootDir . '/var/log');
 $configurator->setTimeZone('Europe/Prague');
-$configurator->setTempDirectory(__DIR__ . '/../var');
+$configurator->setTempDirectory($rootDir . '/var');
 
-$configurator->addConfig(__DIR__ . '/../etc/config.neon');
-$configurator->addConfig(__DIR__ . '/../etc/config.local.neon');
+$configurator->addParameters([
+    'rootDir' => $rootDir,
+    'srcDir' => $rootDir . '/src',
+    'wwwDir' => $rootDir . '/public',
+]);
+
+if (!is_file($rootDir . '/etc/config.local.neon')) {
+    die("Please create and set up the local configuration file!\n");
+}
+
+$configurator->addConfig($rootDir . '/etc/config.neon');
+$configurator->addConfig($rootDir . '/etc/config.local.neon');
 
 return $configurator->createContainer();
