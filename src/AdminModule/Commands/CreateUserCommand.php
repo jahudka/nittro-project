@@ -76,7 +76,7 @@ class CreateUserCommand extends Command {
             if ($need) {
                 throw new \RuntimeException('Name cannot be empty');
             }
-        } else if ($this->userRepository->findOneBy(['name' => $name], false)) {
+        } else if ($this->userRepository->findOneBy(['name' => $name])) {
             throw new \RuntimeException('That user already exists');
         }
     }
@@ -88,7 +88,7 @@ class CreateUserCommand extends Command {
             }
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \RuntimeException('Please specify a valid e-mail address');
-        } else if ($this->userRepository->findOneBy(['email' => $email], false)) {
+        } else if ($this->userRepository->findOneBy(['email' => $email])) {
             throw new \RuntimeException('That e-mail is already taken');
         }
     }

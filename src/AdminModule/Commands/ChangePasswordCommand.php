@@ -70,7 +70,7 @@ class ChangePasswordCommand extends Command {
             if ($need) {
                 throw new \RuntimeException('Please specify a valid e-mail address');
             }
-        } else if (!$this->userRepository->findOneBy(['email' => $email], false)) {
+        } else if (!$this->userRepository->findOneBy(['email' => $email])) {
             throw new \RuntimeException('No user with the specified e-mail exists');
         }
     }
