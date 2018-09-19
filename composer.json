@@ -3,6 +3,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
+        "php": "^7.1",
         "nette/di": "^2.4.10",
         "nette/application": "^2.4.9",
         "nette/forms": "^2.4.6",

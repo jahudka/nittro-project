@@ -173,45 +173,37 @@ gulp.task('watch:public:css', function () {
     return gulp.watch([
         'src/PublicModule/assets/css/**',
         'src/assets/css/**'
-    ], [
-        'public:css'
-    ]);
+    ], gulp.parallel('public:css'));
 });
 
 gulp.task('watch:public:js', function () {
     return gulp.watch([
         'src/PublicModule/assets/js/**',
         'src/assets/js/**'
-    ], [
-        'public:js'
-    ]);
+    ], gulp.parallel('public:js'));
 });
 
 gulp.task('watch:admin:css', function () {
     return gulp.watch([
         'src/AdminModule/assets/css/**',
         'src/assets/css/**'
-    ], [
-        'admin:css'
-    ]);
+    ], gulp.parallel('admin:css'));
 });
 
 gulp.task('watch:admin:js', function () {
     return gulp.watch([
         'src/AdminModule/assets/js/**',
         'src/assets/js/**'
-    ], [
-        'admin:js'
-    ]);
+    ], gulp.parallel('admin:js'));
 });
 
-gulp.task('public', ['public:js', 'public:css', 'public:fonts']);
-gulp.task('admin', ['admin:js', 'admin:css', 'admin:fonts']);
-gulp.task('css', ['public:css', 'admin:css']);
-gulp.task('js', ['public:js', 'admin:js']);
-gulp.task('watch:public', ['watch:public:css', 'watch:public:js']);
-gulp.task('watch:admin', ['watch:admin:css', 'watch:admin:js']);
-gulp.task('watch:css', ['watch:public:css', 'watch:admin:css']);
-gulp.task('watch:js', ['watch:public:js', 'watch:admin:js']);
-gulp.task('watch', ['watch:public', 'watch:admin']);
-gulp.task('default', ['public', 'admin']);
+gulp.task('public', gulp.parallel('public:js', 'public:css', 'public:fonts'));
+gulp.task('admin', gulp.parallel('admin:js', 'admin:css', 'admin:fonts'));
+gulp.task('css', gulp.parallel('public:css', 'admin:css'));
+gulp.task('js', gulp.parallel('public:js', 'admin:js'));
+gulp.task('watch:public', gulp.parallel('watch:public:css', 'watch:public:js'));
+gulp.task('watch:admin', gulp.parallel('watch:admin:css', 'watch:admin:js'));
+gulp.task('watch:css', gulp.parallel('watch:public:css', 'watch:admin:css'));
+gulp.task('watch:js', gulp.parallel('watch:public:js', 'watch:admin:js'));
+gulp.task('watch', gulp.parallel('watch:public', 'watch:admin'));
+gulp.task('default', gulp.parallel('public', 'admin'));
