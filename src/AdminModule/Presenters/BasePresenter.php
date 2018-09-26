@@ -10,12 +10,12 @@ use Nittro\Bridges\NittroUI\Presenter;
 
 abstract class BasePresenter extends Presenter {
 
-    protected $tab;
+    protected $module;
+
 
     protected function startup() : void {
         parent::startup();
-
-        $this->setDefaultSnippets(['title', 'content']);
+        $this->setDefaultSnippets(['header', 'content']);
 
         if (!$this->getUser()->isLoggedIn() && !$this->isPublic()) {
             if (!$this->getRequest()->hasFlag(Request::RESTORED)) {
@@ -30,19 +30,14 @@ abstract class BasePresenter extends Presenter {
     protected function afterRender() : void {
         parent::afterRender();
 
-        if (!isset($this->tab)) {
-            $this->tab = lcfirst(preg_replace('/^Admin:/', '', $this->getName()));
+        if (!isset($this->module)) {
+            $this->module = lcfirst(preg_replace('/^Admin:/', '', $this->getName()));
         }
 
-        $this->template->tab = $this->payload->tab = $this->tab;
+        $this->template->module = $this->payload->module = $this->module;
 
-        if ($this->isAjax() && (($restored = $this->getRequest()->hasFlag(Request::RESTORED)) || $this->getRequest()->isMethod(Request::FORWARD))) {
-            if ($restored) {
-                $this->postGet('this');
-            }
-
-            $this->redrawControl('header');
-            $this->redrawControl('menu');
+        if ($this->isAjax() && ($this->getRequest()->hasFlag(Request::RESTORED) || $this->getRequest()->isMethod(Request::FORWARD))) {
+            $this->postGet('this');
         }
     }
 

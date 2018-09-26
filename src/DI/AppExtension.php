@@ -46,7 +46,7 @@ class AppExtension extends CompilerExtension {
     }
 
     private function findFactories() : array {
-        $loader = $this->createNamespaceLoader('Factories');
+        $loader = $this->createNamespaceLoader('Components');
         $loader->rebuild();
         $interfaces = [];
 

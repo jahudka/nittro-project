@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec730478be3c9c19d65ae14b2bbd3a7e",
+    "content-hash": "8831c86f6f31ed92d25a9b8813bafe65",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2306,21 +2306,22 @@
         },
         {
             "name": "nittro/nette-bridges",
-            "version": "v2.0.10",
+            "version": "v2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nittro/nette-bridges.git",
-                "reference": "5a8914ce7dbcb5c570a7d830785cfb91b4217bf2"
+                "reference": "38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nittro/nette-bridges/zipball/5a8914ce7dbcb5c570a7d830785cfb91b4217bf2",
-                "reference": "5a8914ce7dbcb5c570a7d830785cfb91b4217bf2",
+                "url": "https://api.github.com/repos/nittro/nette-bridges/zipball/38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c",
+                "reference": "38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c",
                 "shasum": ""
             },
             "require-dev": {
                 "latte/latte": "^2.4",
-                "nette/application": "^2.4"
+                "nette/application": "^2.4",
+                "nette/di": "^2.4"
             },
             "type": "library",
             "autoload": {
@@ -2340,7 +2341,7 @@
             ],
             "description": "Nittro PHP bridges",
             "homepage": "https://www.nittro.org/",
-            "time": "2018-08-13T14:25:51+00:00"
+            "time": "2018-09-24T18:43:53+00:00"
         },
         {
             "name": "psr/log",
@@ -2575,16 +2576,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.5.2",
+            "version": "v2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "93f89fbff33db4d583062104c71d6083b717371a"
+                "reference": "7f670b08a7f4ed0243373f9d003d139196273861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/93f89fbff33db4d583062104c71d6083b717371a",
-                "reference": "93f89fbff33db4d583062104c71d6083b717371a",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/7f670b08a7f4ed0243373f9d003d139196273861",
+                "reference": "7f670b08a7f4ed0243373f9d003d139196273861",
                 "shasum": ""
             },
             "require": {
@@ -2594,7 +2595,8 @@
             },
             "require-dev": {
                 "nette/di": "~2.3",
-                "nette/tester": "~1.7"
+                "nette/tester": "~1.7",
+                "nette/utils": "~2.3"
             },
             "suggest": {
                 "https://nette.org/donate": "Please support Tracy via a donation"
@@ -2636,7 +2638,7 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2018-08-13T16:46:17+00:00"
+            "time": "2018-09-24T22:35:07+00:00"
         }
     ],
     "packages-dev": [],

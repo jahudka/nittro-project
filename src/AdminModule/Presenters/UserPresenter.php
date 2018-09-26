@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\AdminModule\Presenters;
 
-use App\AdminModule\Factories\ILoginFormFactory;
-use App\AdminModule\Forms\LoginForm;
+use App\AdminModule\Components\LoginControl;
 
 
 class UserPresenter extends BasePresenter {
 
-    /** @var ILoginFormFactory */
+    /** @var LoginControl\ILoginControlFactory */
     private $loginFormFactory;
 
 
@@ -18,7 +17,7 @@ class UserPresenter extends BasePresenter {
         return true;
     }
 
-    public function injectLoginFormFactory(ILoginFormFactory $loginFormFactory) : void {
+    public function injectLoginFormFactory(LoginControl\ILoginControlFactory $loginFormFactory) : void {
         $this->loginFormFactory = $loginFormFactory;
     }
 
@@ -26,25 +25,27 @@ class UserPresenter extends BasePresenter {
         $this->getUser()->logout(true);
 
         if ($this->isAjax()) {
-            $this->forward('Dashboard:');
+            $this->forward('login');
         } else {
-            $this->redirect('Dashboard:');
+            $this->redirect('login');
         }
     }
 
     public function renderLogin(?string $backlink = null) : void {
+        $this->module = 'login';
+
         if ($this->getUser()->isLoggedIn()) {
             if ($backlink) {
                 $this->restoreRequest($backlink);
             } else if ($this->isAjax()) {
-                $this->forward('Dashboard');
+                $this->forward('Dashboard:');
             } else {
                 $this->redirect('Dashboard:');
             }
         }
     }
 
-    public function createComponentLogin() : LoginForm {
+    public function createComponentLogin() : LoginControl\LoginControl {
         return $this->loginFormFactory->create();
     }
 

@@ -2,63 +2,56 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no" />
 
         <title>Admin</title>
 
+        <script type="application/javascript">window._stack = [];</script>
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/admin.min.css" />
         <script type="application/javascript" src="{$basePath}/js/admin.min.js" async defer></script>
     </head>
-    <body>
-        <nav n:snippet="header" class="navbar navbar-inverse navbar-fixed-top">
-            {block navbar}
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a role="button" class="navbar-toggle collapsed class-toggle" data-toggle-target="#{snippetId menu}" data-toggle-reset="true">
-                            <span class="sr-only">Navigace</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-                        <a n:href="Dashboard:" class="navbar-brand">Admin</a>
-                    </div>
+    <body n:class="$module" data-class-source="module">
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+            <a n:href="Dashboard:" class="navbar-brand col-sm-3 col-md-2 mr-0">Admin</a>
 
-                    <ul class="nav navbar-nav navbar-right hidden-xs">
-                        {if $user->isLoggedIn()}
-                            <li>
-                                <p class="navbar-text">{$user->getIdentity()->getName()}</p>
-                            </li>
-                            <li><a n:href="User:logout" title="Log out" data-transition=".nittro-transition-auto, .sidebar"><span class="glyphicon glyphicon-log-out"></span></a></li>
-                        {else}
-                            <li><a n:href="User:login" title="Log in"><span class="glyphicon glyphicon-log-in"></span></a></li>
-                        {/if}
-                    </ul>
-                </div>
-            {/block}
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a n:href="User:logout" class="nav-link">Sign out</a>
+                </li>
+            </ul>
         </nav>
 
-        <section id="main-content">
-            <div n:snippet="menu" class="sidebar nittro-transition-slide" n:inner-block="menu">
-                <nav class="list-group tab-container" data-source="tab">
-                    <a n:href="Dashboard:" data-value="dashboard" n:class="$tab === 'dashboard' ? active, list-group-item">
-                        <span class="glyphicon glyphicon-home"></span>
-                        Přehled
-                    </a>
-                    {if $user->isLoggedIn()}
-                    <a n:href="User:logout" class="list-group-item visible-xs">
-                        <span class="glyphicon glyphicon-log-out"></span>
-                        Odhlásit
-                    </a>
-                    {/if}
+        <div role="main" class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column" data-class-source="module" data-class-target="module">
+                            <li class="nav-item">
+                                <a n:href="Dashboard:" data-module="dashboard" n:class="$module === 'dashboard' ? active, nav-link">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a n:href="Dashboard:pokus" data-module="pokus" n:class="$module === 'pokus' ? active, nav-link">
+                                    Pokus
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
+
+                <main role="main" class="main col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <div n:snippet="header" class="main-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        {block header}{/block}
+                    </div>
+
+                    <div n:flashes></div>
+
+                    <div n:snippet="content" class="nittro-transition-auto nittro-transition-fade">
+                        {block content}{/block}
+                    </div>
+                </main>
             </div>
-            <div class="content">
-                <h1 n:snippet="title" class="nittro-transition-auto nittro-transition-fade">{block title}{/block}</h1>
-                <ul n:flashes></ul>
-                <div n:snippet="content" class="nittro-transition-auto nittro-transition-fade">
-                    {block content}{/block}
-                </div>
-            </div>
-        </section>
+        </div>
     </body>
 </html>

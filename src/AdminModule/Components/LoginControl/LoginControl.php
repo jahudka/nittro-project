@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\AdminModule\Forms;
+namespace App\AdminModule\Components\LoginControl;
 
 use App\UI\BaseControl;
 use Nette\Application\UI\Form;
@@ -10,7 +10,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Security\User;
 
 
-class LoginForm extends BaseControl {
+class LoginControl extends BaseControl {
 
     /** @var callable[] */
     public $onLogin = [];

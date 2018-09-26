@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Project build script
+# You can modify this to your needs and use it as part of your CI / CD pipeline.
+
+# This will make sure the script terminates upon first error (-e).
+# Undefined shell variables are also considered an error (-u).
+# All commands will be echoed back by the shell (-x).
+set -eux
+
+# This just makes sure the expected folders that might not be present
+# in a git repository are available.
+mkdir -p public/js public/css public/fonts var/cache var/log var/sessions
+
+# This will install dependencies and compile assets
+npm install
+composer install --no-suggest --no-progress --no-dev --ignore-platform-reqs
+node_modules/.bin/gulp
+
+# This sets up permissions so that only the owner may access everything;
+# other group members can only access the /public folder and the rest of the world
+# gets no access at all. This works well with Nginx + PHP FPM if the files are
+# owned by the same user that runs the FPM pool and the group 'www-data'
+# (which is usually what Nginx uses) - that way Nginx has access to all the
+# static assets in /public and the FPM pool can access the app source code.
+chmod -R go-rwx .
+chmod g+rx .
+chmod -R g+rX ./public

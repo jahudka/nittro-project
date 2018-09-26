@@ -55,7 +55,7 @@ const adminBuilder = new nittro.Builder({
     vendor: {
         js: [
             'node_modules/jquery/dist/jquery.slim.min.js',
-            'node_modules/bootstrap/dist/js/bootstrap.min.js'
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
         ],
         css: [
             'node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -83,21 +83,22 @@ const adminBuilder = new nittro.Builder({
     },
     libraries: {
         js: [
-            'src/assets/js/TabHelper.js',
-            'src/assets/js/ClassToggle.js',
+            'src/assets/js/Forms/BootstrapErrorRenderer.js',
+            'src/assets/js/ClassSwitcher.js',
             'src/AdminModule/assets/js/scripts.js'
         ],
         css: [
+            'src/assets/css/bootstrap-bridge.less',
             'src/AdminModule/assets/css/styles.less'
         ]
     },
     bootstrap: {
         services: {
-            tabHelper: 'App.TabHelper()!',
-            classToggle: 'App.ClassToggle()!'
+            formErrorRenderer: 'App.Forms.BootstrapErrorRenderer()',
+            classSwitcher: 'App.ClassSwitcher()!'
         }
     },
-    stack: false
+    stack: true
 });
 
 
@@ -148,7 +149,7 @@ gulp.task('public:css', function (cb) {
 
 gulp.task('public:fonts', function () {
     return gulp.src([
-        'src/assets/fonts/*'
+        'src/PublicModule/assets/fonts/*'
     ]).pipe(gulp.dest('public/fonts'));
 });
 
@@ -165,8 +166,8 @@ gulp.task('admin:css', function (cb) {
 
 gulp.task('admin:fonts', function () {
     return gulp.src([
-        'node_modules/bootstrap/dist/fonts/*'
-    ]).pipe(gulp.dest('public/fonts'))
+        'src/AdminModule/assets/fonts/*'
+    ]).pipe(gulp.dest('public/fonts'));
 });
 
 gulp.task('watch:public:css', function () {

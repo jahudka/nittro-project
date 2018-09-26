@@ -4,6 +4,7 @@ extensions:
     annotations: Kdyby\Annotations\DI\AnnotationsExtension
     doctrine: Kdyby\Doctrine\DI\OrmExtension
     events: Kdyby\Events\DI\EventsExtension
+    nittro: Nittro\Bridges\NittroDI\NittroExtension
 
 parameters:
 
@@ -43,10 +44,7 @@ annotations:
 session:
     autoStart: smart
     expiration: +1 month
-
-latte:
-    macros:
-        - Nittro\Bridges\NittroLatte\NittroMacros
+    savePath: %tempDir%/sessions
 
 services:
     - App\Security\DoctrineIdentityProvider

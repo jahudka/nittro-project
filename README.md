@@ -2,7 +2,7 @@ Nittro project skeleton
 =======================
 
 This is a simple skeleton for a Nette project with Nittro via Gulp,
-Doctrine via Kdyby and a basic admin template based on Bootstrap v3.
+Doctrine via Kdyby and a basic admin template based on Bootstrap v4.
 PHP 7.1 is required.
 
 ### Installation
@@ -10,8 +10,7 @@ PHP 7.1 is required.
 ```bash
 composer create-project jahudka/nittro-project myproject
 cd myproject
-npm install
-gulp
+.ci/build
 cp etc/config.local.dist etc/config.local.neon
 $EDITOR etc/config.local.neon
 bin/console orm:schema-tool:create
@@ -23,24 +22,21 @@ bin/console orm:schema-tool:create
  - All application sources are under `./src`, which is a PSR-4 namespace
    root for the `App` namespace; autoloading in this namespace is provided
    by Composer.
- - All caches and logs are under `./var`.
+ - All caches and logs, as well as sessions, are under `./var`.
 
 ### Doctrine
- - Entities are in `./src/Entity`.
+ - Entities reside in `./src/Entity`.
  - A default entity exists for user identity, users can be managed
    using the console tool's `user:*` family of commands.
 
 ### Components
  - There is an abstract base class `App\UI\BaseControl` which adds
-   the `render()` method; components extending this class will be
-   rendered using a latte template of the same name (lc-first) as
-   the component's class name without namespace, located either at
-   `./templates` or `./` relative from the file the component is
-   defined in, e.g. the `App\AdminModule\Forms\LoginForm` component has
-   a template at `src/AdminModule/Forms/templates/loginForm.latte`.
+   the `setView(string $view)`, `getView()` and `render()` methods;
+   components extending this class will be rendered using a latte template
+   located at `<component directory>/templates/<view>.latte`.
  - As a convenience, all interfaces with a single method called `create`
-   defined in either the common `./src/Factories` or the per-module
-   `Factories` directories are automatically registered in the DI container
+   defined in either the common `./src/Components` or the per-module
+   `Components` directories are automatically registered in the DI container
    (unless a service implementing the interface already exists).
 
 ### Assets

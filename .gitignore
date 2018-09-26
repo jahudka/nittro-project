@@ -1,7 +1,6 @@
 /vendor/
 /node_modules/
-/var/cache/
-/var/log/
+/var/
 /public/js/
 /public/css/
 /public/fonts/
